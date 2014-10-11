@@ -2,7 +2,7 @@
 
 ```
 ### Play the Game live
-==================
+======================
 
-(http://jsfiddle.net/6ewis/y89sfczg/ "Play!")
+[Play!](http://jsfiddle.net/6ewis/y89sfczg/)
 
