@@ -1,16 +1,3 @@
-//General helpful function
-function deepCopy(o) {
-  var copy = Object.create(Object.getPrototypeOf(o));
-  var propNames = Object.getOwnPropertyNames(o);
-
-  propNames.forEach(function(name) {
-    var desc = Object.getOwnPropertyDescriptor(o, name);
-    Object.defineProperty(copy, name, desc);
-  });
-
-  return copy;
-}
-
 //Board
 var Board = function() {
   this.cells = [];
@@ -22,22 +9,28 @@ var Board = function() {
 };
 
 Board.prototype = {
-  // nextStep: function() {
-  //   var tempCells = deepCopy(this.cells);
-  //   tempCells.forEach(function(element,index,array){
-  //      this.applyRules(element);
-  //   });
-  //   this.cells = tempCells;
-  // },
-  applyRules: function(cell) {
-    if ((cell.status === "alive") && (cell.aliveNeighbourSize(this) < 2)) {
-      cell.status = "dead";
-    } else if ((cell.status === "alive") && (cell.aliveNeighbourSize(this) > 3)) {
-      cell.status = "dead";
-    } else if ((cell.status === "dead") && (cell.aliveNeighbourSize(this) === 3)) {
-      cell.status = "alive";
+  updateOriginalCells: function(changedCells) {
+    changedCells.forEach(function(cell) {
+        if (cell.status === "alive") {
+          cell.status = "dead";
+        } else {
+          cell.status = "alive"; 
+        }
+      });
+    },
+  applyRules: function() {
+    var changedCells = [];
+    for(var i=0; i < this.cells.length ; i++) {
+      var cell = this.cells[i];
+      if ((cell.status === "alive") && (cell.aliveNeighbourSize(this) < 2)) {
+        changedCells.push(cell)
+      } else if ((cell.status === "alive") && (cell.aliveNeighbourSize(this) > 3)) {
+        changedCells.push(cell)
+      } else if ((cell.status === "dead") && (cell.aliveNeighbourSize(this) === 3)) {
+        changedCells.push(cell)
+      }
     }
-    return cell;
+    this.updateOriginalCells(changedCells);
   },
   contains: function(x, y, status) {
     return this.cells.some(function(element, index, array) {

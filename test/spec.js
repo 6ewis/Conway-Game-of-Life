@@ -27,10 +27,10 @@ describe("Game of life", function() {
       });
       it("#neighbourSize - calculates and return the neighbour size of a cell", function() {
         //cell of interest
-        var cell = new Cell(0,0, "alive");
+        var cell = new Cell(10,11, "alive");
         //neighbours alive
-        var cell2 = new Cell(-1,0, "alive");
-        var cell3 = new Cell(-1,1, "alive");
+        var cell2 = new Cell(10,10, "alive");
+        var cell3 = new Cell(10,12, "alive");
         var cell4 = new Cell(-1,-1, "alive");
         //neigbours dead
         var cell5 = new Cell(0,1, "dead");
@@ -41,7 +41,7 @@ describe("Game of life", function() {
         board = new Board();
         board.addCells(cell, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9);
         console.log(board.cells);
-        expect(cell.aliveNeighbourSize(board)).toEqual(3);
+        expect(cell.aliveNeighbourSize(board)).toEqual(2);
       });
     });
     describe("#applyRules - change the cell status based on Conway's Game of Life Rules",function() {
@@ -50,7 +50,7 @@ describe("Game of life", function() {
           var cell1 = new Cell(0,0, "alive");
           var board = new Board();
           board.addCells(cell1);
-          board.applyRules(cell1);
+          board.applyRules();
           expect(cell1.status).toEqual("dead");
         });
         it("The cell dies with 1 live neighbours", function() {
@@ -59,7 +59,7 @@ describe("Game of life", function() {
           var cell3 = new Cell(0,2, "dead");
           board = new Board();
           board.addCells(cell1, cell2, cell3);
-          board.applyRules(cell1);
+          board.applyRules();
           expect(cell1.status).toEqual("dead");
         });
 
@@ -71,7 +71,7 @@ describe("Game of life", function() {
           var cell3 = new Cell(0,-1, "alive");
           board = new Board();
           board.addCells(cell1, cell2, cell3);
-          board.applyRules(cell1);
+          board.applyRules();
           expect(cell1.status).toEqual("alive");
         });
         it("A live cell with three live neighbours lives on", function() {
@@ -81,7 +81,7 @@ describe("Game of life", function() {
           var cell4 = new Cell(-1,-1, "alive");
           board = new Board();
           board.addCells(cell1, cell2, cell3, cell4);
-          board.applyRules(cell1);
+          board.applyRules();
           expect(cell1.status).toEqual("alive");
         });
       });
@@ -94,7 +94,7 @@ describe("Game of life", function() {
           var cell5 = new Cell(1,1, "alive");
           board = new Board();
           board.addCells(cell1, cell2, cell3, cell4, cell5);
-          board.applyRules(cell1);
+          board.applyRules();
           expect(cell1.status).toEqual("dead");
         })
       });
@@ -107,33 +107,34 @@ describe("Game of life", function() {
           var cell5 = new Cell(1,1, "alive");
           board = new Board();
           board.addCells(cell1, cell2, cell3, cell4, cell5);
-          board.applyRules(cell1);
+          board.applyRules();
           expect(cell1.status).toEqual("dead");
         });
         it("a dead cell with only three live neighbours revive", function() {
           var cell1 = new Cell(0,0, "dead");
           var cell2 = new Cell(0,1, "alive");
           var cell3 = new Cell(0,-1, "alive");
-          var cell4 = new Cell(-1,-1, "alive");
+          var cell4 = new Cell(-1,0, "alive");
           board = new Board();
           board.addCells(cell1, cell2, cell3, cell4);
-          board.applyRules(cell1);
+          board.applyRules();
           expect(cell1.status).toEqual("alive");
         });  
       });
     });
     describe("#nextStep - it updates the board cells as a representation of the next step", function() {
-      // it("shows the blinker pattern", function() {
-      //   var cell1 = new Cell(0,0, "alive");
-      //   var cell2 = new Cell(0,1, "alive");
-      //   var cell3 = new Cell(0,2, "alive");
-      //   board = new Board();
-      //   board.addCells(cell1, cell2, cell3);
-      //   board.nextStep();
-      //   expect(cell1.status).toEqual("alive");
-      //   expect(cell2.status).toEqual("dead");
-      //   expect(cell3.status).toEqual("dead");
-      // });
+      it("shows the blinker pattern", function() {
+        var cell1 = new Cell(10,0, "alive");
+        var cell2 = new Cell(10,1, "alive");
+        var cell3 = new Cell(10,2, "alive");
+
+        board = new Board();
+        board.addCells(cell1, cell2, cell3);
+        board.applyRules();
+        expect(cell1.status).toEqual("dead");
+        expect(cell2.status).toEqual("alive");
+        expect(cell3.status).toEqual("dead");
+      });
     });
   });
 });
